@@ -3,11 +3,21 @@
 <?php if(!$session->is_signed_in()){redirect("login.php");}?>
 
 <?php 
-    // $photos = Photo::find_all();
 
-    if(empty($_GET['id'])){
-        redirect("photos.php");
+    if(!User::find_by_id($_SESSION['user_id'])->is_admin() & $_SESSION['user_id'] != Photo::find_by_id($_GET['id'])->user_id){
+        redirect("photos_user.php");
     }else{
+
+        if(empty($_GET['role'])){
+            $direct_to = "photos_user.php";
+        }else{
+            $direct_to = "photos.php";
+        }
+
+        if(empty($_GET['id'])){
+            redirect($direct_to);
+        }
+
         $photo = Photo::find_by_id($_GET['id']);
 
         if(isset($_POST['update'])){
@@ -19,11 +29,11 @@
                 $photo->description = $_POST['description'];
 
                 $photo->save();
-                redirect("photos.php");
+                redirect($direct_to);
                 $session->message("The photo: {$photo->title} has been updated");
             }
-        
         }
+        
     }
 
 ?>
@@ -100,9 +110,6 @@
                                             </p>
                                         </div>
                                         <div class="info-box-footer clearfix">
-                                            <div class="info-box-delete pull-left">
-                                                <a  href="delete_photo.php?id=<?php echo $photo->id; ?>" class="btn btn-danger btn-lg ">Delete</a>   
-                                            </div>
                                             <div class="info-box-update pull-right ">
                                                 <input type="submit" name="update" value="Update" class="btn btn-primary btn-lg ">
                                             </div>   

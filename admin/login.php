@@ -2,28 +2,32 @@
 
 <?php
 
-if($session->is_signed_in()){
-    redirect("index.php");
-}
-
-if(isset($_POST['submit'])){
-    $username = trim($_POST['username']);
-    $password = trim($_POST['password']);
-
-    $user_found = User::verify_user($username, $password);
-
-    if($user_found){
-        $session->login($user_found);
-        redirect("index.php");
-    }else{
-        $the_message = "Your username or password was incorrect";
+    if($session->is_signed_in()){
+        redirect("user_stats.php");
     }
 
-}else{
-    $the_message = "";
-    $username = "";
-    $password = "";
-}
+    if(isset($_POST['submit'])){
+        $username = trim($_POST['username']);
+        $password = trim($_POST['password']);
+
+        $user_found = User::verify_user($username, $password);
+
+        if($user_found){
+            $session->login($user_found);
+            redirect("user_stats.php");
+        }else{
+            $the_message = "Your username or password was incorrect";
+        }
+
+    }else{
+        $the_message = "";
+        $username = "";
+        $password = "";
+    }
+
+    if(isset($_POST['register'])){
+        redirect("register.php");
+    }
 
 ?>
 
@@ -45,6 +49,7 @@ if(isset($_POST['submit'])){
 
     <div class="form-group">
        <input type="submit" name="submit" value="Submit" class="btn btn-primary">
+       <input type="submit" name="register" value="Register" class="btn">
     </div>
     
 </form>

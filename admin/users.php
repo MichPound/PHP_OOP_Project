@@ -2,6 +2,8 @@
 
 <?php if(!$session->is_signed_in()){redirect("login.php");}?>
 
+<?php if(!User::find_by_id($_SESSION['user_id'])->is_admin()){redirect("user_stats.php");}?>
+
 <?php 
     $users = User::find_all();
 ?>
@@ -35,8 +37,11 @@
                                         <th>Id</th>
                                         <th>Photo</th>
                                         <th>Username</th>
+                                        <th>Role</th>
                                         <th>First Name</th>
                                         <th>Last Name</th>
+                                        <th>Photos</th>
+                                        <th>Comments</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -48,13 +53,25 @@
                                                 <td>
                                                     <?php echo $user->username ?>
                                                     <div class="action_links">
-                                                        <a href="delete_user.php?id=<?php echo $user->id; ?>" class="delete_link">Delete</a>
+                                                        <a href="delete_user.php?role=admin&id=<?php echo $user->id; ?>" class="delete_link">Delete</a>
                                                         <a href="edit_user.php?id=<?php echo $user->id; ?>">Edit</a>
                                                     </div>
                                                 </td>
-
+                                                <td><?php echo $user->role ?></td>
                                                 <td><?php echo $user->first_name ?></td>
                                                 <td><?php echo $user->last_name ?></td>
+                                                <td>
+                                                    <?php echo $user->count_users_photos() ?>
+                                                    <div class="action_links">
+                                                        <a href="photos_user.php?user_id=<?php echo $user->id; ?>">View</a>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <?php echo $user->count_users_comments() ?>
+                                                    <div class="action_links">
+                                                        <a href="comments_user.php?user_id=<?php echo $user->id; ?>">View</a>
+                                                    </div>
+                                                </td>
                                             </tr>    
                                     <?php endforeach ?>                            
                                 </tbody>

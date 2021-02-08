@@ -2,6 +2,8 @@
 
 <?php if(!$session->is_signed_in()){redirect("login.php");}?>
 
+<?php if(!User::find_by_id($_SESSION['user_id'])->is_admin()){redirect("comments_user.php");}?>
+
 <?php 
     $comments = Comment::find_all();
 ?>
@@ -42,7 +44,7 @@
                                                 <td>
                                                     <?php echo $comment->author ?>
                                                     <div class="action_links">
-                                                        <a href="delete_comment.php?id=<?php echo $comment->id; ?>" class="delete_link">Delete</a>
+                                                        <a href="delete_comment.php?id=<?php echo $comment->id; ?>&role=admin" class="delete_link">Delete</a>
                                                     </div>
                                                 </td>
                                                 <td><?php echo $comment->body ?></td>                                        

@@ -8,7 +8,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.php">Home</a>
+                <a class="navbar-brand" href="index.php">Gallery</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -20,7 +20,7 @@
                         <a href="#">Services</a>
                     </li> -->
                     <li>
-                        <a class="navbar-brand" href="admin">Admin</a>
+                        <a class="navbar-brand" href="admin/user_stats.php">Home</a>
                     </li>
                 </ul>
             </div>

@@ -9,6 +9,7 @@
         $photo = new Photo();
         $photo->title = $_POST['title'];
         $photo->set_file($_FILES['file']);
+        $photo->user_id = $_SESSION['user_id'];
 
         if($photo->save()){
             $message = "Photo uploaded successfully";

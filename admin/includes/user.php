@@ -3,10 +3,11 @@
 class User extends Db_object{
 
     protected static $db_table = "users";
-    protected static $db_table_fields = array('username', 'password', 'first_name', 'last_name', 'user_image');
+    protected static $db_table_fields = array('username', 'password', 'role', 'first_name', 'last_name', 'user_image');
     public $id;
     public $username;
     public $password;
+    public $role;
     public $first_name;
     public $last_name;
     public $user_image;
@@ -18,20 +19,52 @@ class User extends Db_object{
         return empty($this->user_image) ? $this->image_placeholder : $this->upload_directory . DS . $this->user_image;
     }
 
-    public static function verify_user($username, $password){
+    public function is_admin(){
+        return ($this->role == "admin") ? true : false;
+    }
+
+    public static function user_exists($username){
         global $database;
         $username = $database->escape_string($username);
-        $password = $database->escape_string($password);
 
         $sql = "SELECT * FROM users WHERE ";
         $sql .= "username = '{$username}' ";
-        $sql .= "AND password = '{$password}' ";
         $sql .= "LIMIT 1";
 
         $the_result_array = self::find_by_query($sql);
 
         return !empty($the_result_array) ? array_shift($the_result_array) : false;
     }
+
+    public static function verify_user($username, $password){
+
+        if(self::user_exists($username)){
+            $found_user = self::user_exists($username);
+
+            if(hash_equals($found_user->password, crypt($password, $found_user->password))){
+                return $found_user;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
+
+    // public static function verify_user($username, $password){
+    //     global $database;
+    //     $username = $database->escape_string($username);
+    //     $password = $database->escape_string($password);
+
+    //     $sql = "SELECT * FROM users WHERE ";
+    //     $sql .= "username = '{$username}' ";
+    //     $sql .= "AND password = '{$password}' ";
+    //     $sql .= "LIMIT 1";
+
+    //     $the_result_array = self::find_by_query($sql);
+
+    //     return !empty($the_result_array) ? array_shift($the_result_array) : false;
+    // }
 
     public function set_file($file){
 
@@ -108,6 +141,53 @@ class User extends Db_object{
         }else{
             return false;
         }
+    }
+
+    public function photos(){
+        global $database;
+
+        return Photo::find_by_query("SELECT * FROM photos WHERE user_id= " . $database->escape_string($this->id));
+    }
+
+    public function comments(){
+        global $database;
+        $photos = $this->photos();
+        $comments = [];
+
+        foreach ($photos as $photo) {
+            // $comments += Comment::find_by_query("SELECT * FROM comments WHERE photo_id= " . $database->escape_string($photo->id));
+            $comments = array_merge($comments, Comment::find_by_query("SELECT * FROM comments WHERE photo_id= " . $database->escape_string($photo->id)));
+        }
+
+        return $comments;
+    }
+
+    public function count_users_photos(){
+        global $database;
+
+        $sql = "SELECT COUNT(*) FROM photos WHERE ";
+        $sql .= "user_id= " . $database->escape_string($this->id);
+        $result_set = $database->query($sql);
+        $row = mysqli_fetch_array($result_set);
+
+        return array_shift($row);
+    }
+
+    public function count_users_comments(){
+        global $database;
+        $photos = $this->photos();
+        $sql = "";
+        $count = 0;
+
+        foreach ($photos as $photo) {
+            $sql = "SELECT COUNT(*) FROM comments WHERE ";
+            $sql .= "photo_id= " . $database->escape_string($photo->id);
+            $result_set = $database->query($sql);
+            $row = mysqli_fetch_array($result_set);
+            $count += array_shift($row);
+        }
+
+        return $count;
     }
 
 }

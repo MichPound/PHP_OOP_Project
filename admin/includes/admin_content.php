@@ -1,3 +1,5 @@
+<?php if(!User::find_by_id($_SESSION['user_id'])->is_admin()){redirect("user_stats.php");}?>
+
 <div class="container-fluid">
 
     <!-- Page Heading -->

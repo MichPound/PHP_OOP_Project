@@ -5,40 +5,47 @@
 
 <?php 
 
-    if(empty($_GET['id'])){
+    if(!User::find_by_id($_SESSION['user_id'])->is_admin() & $_SESSION['user_id'] != User::find_by_id($_GET['id'])->id){
         redirect("users.php");
-    }
+    }else{
 
-    $user = User::find_by_id($_GET['id']);
-
-    if(isset($_POST['update'])){
-
-        if($user){
-            $user->username = $_POST['username'];
-            $user->first_name = $_POST['first_name'];
-            $user->last_name = $_POST['last_name'];
-            $user->password = $_POST['password'];
-
-            if(empty($_FILES['user_image'])){
-                $user->save();
-                $session->message("The user: {$user->username} has been updated");
-                
-                redirect("users.php");
-            }else{
-                $user->set_file($_FILES['user_image']);
-                $user->upload_photo();
-                $user->save();
-                $session->message("The user: {$user->username} has been updated");
-
-                redirect("users.php");
-            }
- 
+        if(empty($_GET['id'])){
+            redirect("users.php");
         }
 
-    }
+        $user_to_update = User::find_by_id($_GET['id']);
 
-    if(isset($_POST['delete'])){
-        $user->delete();
+        if(isset($_POST['update'])){
+
+            if($user_to_update){
+                // $user_to_update->username = $user_to_update->username;
+                $user_to_update->first_name = $_POST['first_name'];
+                $user_to_update->last_name = $_POST['last_name'];
+                $user_to_update->password = $_POST['password'];
+
+                if(User::find_by_id($_SESSION['user_id'])->role == "admin"){
+                    $user_to_update->role = $_POST['role'];
+                }else{
+                    $user_to_update->role = "general";
+                }
+
+                if(empty($_FILES['user_image'])){
+                    $user_to_update->save();
+                    $session->message("The user: {$user_to_update->username} has been updated");
+                }else{
+                    $user_to_update->set_file($_FILES['user_image']);
+                    $user_to_update->upload_photo();
+                    $user_to_update->save();
+                    $session->message("The user: {$user_to_update->username} has been updated");
+                }
+                redirect("users.php");
+            }
+
+        }
+
+        if(isset($_POST['delete'])){
+            $user_to_update->delete();
+        }
     }
     
 ?>
@@ -60,12 +67,12 @@
         <div class="row">
             <div class="col-lg-12">
                 <h1 class="page-header">
-                    Users
-                    <small>Subheading</small>
+                    User
+                    <small><?php echo $user_to_update->username; ?></small>
                 </h1>
 
                 <div class="col-md-6 user_image_box">
-                    <a href="#" data-toggle="modal" data-target="#photo-library"><img src="<?php echo $user->image_path_and_placeholder(); ?>" class="img-responsive img-thumbnail" alt=""></a>
+                    <a href="#" data-toggle="modal" data-target="#photo-library"><img src="<?php echo $user_to_update->image_path_and_placeholder(); ?>" class="img-responsive img-thumbnail" alt=""></a>
                 </div>
 
                 <form action="" method="post" enctype="multipart/form-data">                            
@@ -73,24 +80,50 @@
                         <div class="form-group">                                    
                             <input type="file" name="user_image">
                         </div>
-                        <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" name="username" class="form-control" value="<?php echo $user->username; ?>">
-                        </div>
+
+                        <?php
+
+                        if(User::find_by_id($_SESSION['user_id'])->role == "admin"){
+
+                            if($user_to_update->role == "admin"){
+                                $first = "<option value='admin'>admin</option>";
+                                $second = "<option value='general'>general</option>";
+                            }else{
+                                $first = "<option value='general'>general</option>";
+                                $second = "<option value='admin'>admin</option>";
+                            }
+
+                            echo "
+                            <div class='form-group'>  
+                                <label>Role</label>
+                                <select class='form-control' id='' name='role'>
+                                    {$first}
+                                    {$second}
+                                </select>
+                            </div>
+                            ";
+                        }
+
+                        ?>
+
                         <div class="form-group">
                             <label for="first name">First Name</label>
-                            <input type="text" name="first_name" class="form-control" value="<?php echo $user->first_name; ?>">
+                            <input type="text" name="first_name" class="form-control" value="<?php echo $user_to_update->first_name; ?>">
                         </div>
                         <div class="form-group">
                             <label for="last name">Last Name</label>
-                            <input type="text" name="last_name" class="form-control" value="<?php echo $user->last_name; ?>">
+                            <input type="text" name="last_name" class="form-control" value="<?php echo $user_to_update->last_name; ?>">
                         </div>
                         <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" name="password" class="form-control" value="<?php echo $user->password; ?>">
-                        </div>        
+                            <label for="password">Current Password</label>
+                            <input type="password" name="password" class="form-control">
+                        </div>     
+                        <div class="form-group">
+                            <label for="new_password">New Password</label>
+                            <input type="password" name="new_password" class="form-control">
+                        </div>     
                         <div class="form-group">   
-                            <a id="user-id" href="delete_user.php?id=<?php echo $user->id; ?>" class="btn btn-danger">Delete</a>                             
+                            <a id="user-id" href="delete_user.php?id=<?php echo $user_to_update->id; ?>" class="btn btn-danger delete_link"">Delete</a>                             
                             <input type="submit" name="update" class="btn btn-primary pull-right" value="Update">
                         </div>                                                  
                     </div>

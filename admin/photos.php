@@ -2,6 +2,8 @@
 
 <?php if(!$session->is_signed_in()){redirect("login.php");}?>
 
+<?php if(!User::find_by_id($_SESSION['user_id'])->is_admin()){redirect("photos_user.php");}?>
+
 <?php 
     $photos = Photo::find_all();
 ?>
@@ -45,9 +47,9 @@
                                                     <img src="<?php echo $photo->picture_path(); ?>" class="admin-photo-thumbnail" alt="">
 
                                                     <div class="action_links">
-                                                        <a href="delete_photo.php?id=<?php echo $photo->id; ?>" class="delete_link">Delete</a>
+                                                        <a href="delete_photo.php?id=<?php echo $photo->id; ?>&role=admin" class="delete_link">Delete</a>
                                                         <a href="edit_photo.php?id=<?php echo $photo->id; ?>">Edit</a>
-                                                        <a href="../photo.php?id=<?php echo $photo->id; ?>">View</a>
+                                                        <a href="../gallery.php?id=<?php echo $photo->id; ?>">View</a>
                                                     </div>
                                                     
                                                 </td>

@@ -36,6 +36,14 @@ class Comment extends Db_object{
         return self::find_by_query($sql);
     }
 
+    public function find_user_id(){
+        global $database;
+
+        $photo = Photo::find_by_id($this->photo_id);
+
+        return $photo->user_id;
+    }
+
 }
 
 ?>
