@@ -31,7 +31,7 @@
             <h1 class="page-header">
                 My Statistics
             </h1>
-
+            <p><?php echo $message; ?></p>
             <div class="row">
 
                 <div class="col-md-6">

@@ -36,6 +36,19 @@ class User extends Db_object{
         return !empty($the_result_array) ? array_shift($the_result_array) : false;
     }
 
+    public static function user_exists_by_id($id){
+        global $database;
+        $id = $database->escape_string($id);
+
+        $sql = "SELECT * FROM users WHERE ";
+        $sql .= "id = '{$id}' ";
+        $sql .= "LIMIT 1";
+
+        $the_result_array = self::find_by_query($sql);
+
+        return !empty($the_result_array) ? array_shift($the_result_array) : false;
+    }
+
     public static function verify_user($username, $password){
 
         if(self::user_exists($username)){

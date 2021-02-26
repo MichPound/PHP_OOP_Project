@@ -2,33 +2,33 @@
 
 <?php
 
-    require_once("admin/includes/init.php");
+require_once("admin/includes/init.php");
 
-    if(empty($_GET['id'])){
-        redirect("index.php");
-    }
+if(empty($_GET['id'])){
+    redirect("index.php");
+}
 
-    $photo = Photo::find_by_id($_GET['id']);
-    
-    $user = User::find_by_id($photo->user_id);
+$photo = Photo::find_by_id($_GET['id']);
 
-    if(isset($_POST['submit'])){
-        $author = trim($_POST['author']);
-        $body = trim($_POST['body']);
+$user = User::find_by_id($photo->user_id);
 
-        $new_comment = Comment::create_comment($photo->id, $author, $body);
+if(isset($_POST['submit'])){
+    $author = trim($_POST['author']);
+    $body = trim($_POST['body']);
 
-        if($new_comment && $new_comment->save()){            
-            redirect("gallery.php?id={$photo->id}");
-        }else{
-            $message = "There was some problems saving";
-        }
+    $new_comment = Comment::create_comment($photo->id, $author, $body);
+
+    if($new_comment && $new_comment->save()){            
+        redirect("gallery.php?id={$photo->id}");
     }else{
-        $author = "";
-        $body = "";
+        $message = "There was some problems saving";
     }
+}else{
+    $author = "";
+    $body = "";
+}
 
-    $comments = Comment::find_the_comments($photo->id);
+$comments = Comment::find_the_comments($photo->id);
 
 ?>
 
@@ -103,4 +103,3 @@
 </div> -->
 
 <?php include("includes/footer.php"); ?>
-

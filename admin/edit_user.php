@@ -1,52 +1,61 @@
-<?php include("includes/header.php"); ?>
-<?php include("includes/photo_library_modal.php"); ?>
-
-<?php if(!$session->is_signed_in()){redirect("login.php");}?>
-
 <?php 
+include("includes/header.php"); 
+include("includes/photo_library_modal.php");
 
-    if(!User::find_by_id($_SESSION['user_id'])->is_admin() & $_SESSION['user_id'] != User::find_by_id($_GET['id'])->id){
-        redirect("users.php");
-    }else{
+if(!$session->is_signed_in()){
+    redirect("login.php");
+}
 
-        if(empty($_GET['id'])){
-            redirect("users.php");
-        }
+if(empty($_GET['id']) || !User::user_exists_by_id($_GET['id']) || (!User::find_by_id($_SESSION['user_id'])->is_admin() & $_SESSION['user_id'] != User::find_by_id($_GET['id'])->id)){
+    redirect("users.php");
+}
 
-        $user_to_update = User::find_by_id($_GET['id']);
+$user_to_update = User::find_by_id($_GET['id']);
 
-        if(isset($_POST['update'])){
+if(isset($_POST['update'])){
 
-            if($user_to_update){
-                // $user_to_update->username = $user_to_update->username;
-                $user_to_update->first_name = $_POST['first_name'];
-                $user_to_update->last_name = $_POST['last_name'];
-                $user_to_update->password = $_POST['password'];
+    //verify password or be admin and have no password entered
+    if(User::verify_user($user_to_update->username, $_POST['password']) || User::find_by_id($_SESSION['user_id'])->is_admin()){
 
-                if(User::find_by_id($_SESSION['user_id'])->role == "admin"){
-                    $user_to_update->role = $_POST['role'];
-                }else{
-                    $user_to_update->role = "general";
-                }
-
-                if(empty($_FILES['user_image'])){
-                    $user_to_update->save();
-                    $session->message("The user: {$user_to_update->username} has been updated");
-                }else{
-                    $user_to_update->set_file($_FILES['user_image']);
-                    $user_to_update->upload_photo();
-                    $user_to_update->save();
-                    $session->message("The user: {$user_to_update->username} has been updated");
-                }
-                redirect("users.php");
+        if(User::find_by_id($_SESSION['user_id'])->is_admin()){
+            if(!User::user_exists($_POST['username'])){
+                $user_to_update->username = $_POST['username'];//append message saying username taken
             }
-
+            $user_to_update->role = $_POST['role'];
+        }else{
+            $user_to_update->role = "general";
         }
 
-        if(isset($_POST['delete'])){
-            $user_to_update->delete();
+        if(!empty($_POST['new_password'])){
+            $hash = '$6$';
+            $salt = 'rounds=5555$thisisforsomerandomstring$';
+            $hash_and_salt = $hash . $salt;
+            $new_password = crypt($_POST['new_password'], $hash_and_salt);
+
+            $user_to_update->password = $new_password;
         }
+    
+        $user_to_update->first_name = $_POST['first_name'];
+        $user_to_update->last_name = $_POST['last_name'];
+
+        if(empty($_FILES['user_image'])){
+            $user_to_update->save();
+            $session->message("The user: {$user_to_update->username} has been updated");
+        }else{
+            $user_to_update->set_file($_FILES['user_image']);
+            $user_to_update->upload_photo();
+            $user_to_update->save();
+            $session->message("The user: {$user_to_update->username} has been updated");
+        }
+    }else{
+        $session->message("Unable to update, possible incorrect password");
     }
+    redirect("users.php");
+}
+
+if(isset($_POST['delete'])){
+    $user_to_update->delete();
+}
     
 ?>
 
@@ -83,7 +92,7 @@
 
                         <?php
 
-                        if(User::find_by_id($_SESSION['user_id'])->role == "admin"){
+                        if(User::find_by_id($_SESSION['user_id'])->is_admin()){
 
                             if($user_to_update->role == "admin"){
                                 $first = "<option value='admin'>admin</option>";
@@ -92,6 +101,13 @@
                                 $first = "<option value='general'>general</option>";
                                 $second = "<option value='admin'>admin</option>";
                             }
+
+                            echo "
+                            <div class='form-group'>
+                            <label for='username'>Username</label>
+                            <input type='text' name='username' class='form-control' value='{$user_to_update->username}'>
+                            </div>
+                            ";
 
                             echo "
                             <div class='form-group'>  
@@ -114,10 +130,18 @@
                             <label for="last name">Last Name</label>
                             <input type="text" name="last_name" class="form-control" value="<?php echo $user_to_update->last_name; ?>">
                         </div>
-                        <div class="form-group">
-                            <label for="password">Current Password</label>
-                            <input type="password" name="password" class="form-control">
-                        </div>     
+
+                        <?php
+                        if (!User::find_by_id($_SESSION['user_id'])->is_admin()){
+                            echo "
+                            <div class='form-group'>
+                            <label for='password'>Current Password</label>
+                            <input type='password' name='password' class='form-control'>
+                            </div>
+                            ";
+                        }
+                        ?>
+
                         <div class="form-group">
                             <label for="new_password">New Password</label>
                             <input type="password" name="new_password" class="form-control">
