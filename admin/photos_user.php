@@ -40,6 +40,7 @@
                                     <tr>
                                         <th>Photo</th>
                                         <th>Id</th>
+                                        <th>View</th>
                                         <th>File Name</th>
                                         <th>Title</th>
                                         <th>Size</th>
@@ -48,34 +49,43 @@
                                 </thead>
                                 <tbody>
                                     <?php foreach ($photos as $photo) : ?>
-                                            <tr>
-                                                <td>
-                                                    <img src="<?php echo $photo->picture_path(); ?>" class="admin-photo-thumbnail" alt="">
-                                                    <div class="action_links">
-                                                        <a href="delete_photo.php?id=<?php echo $photo->id; ?>" class="delete_link">Delete</a>
+                                    <tr>
+                                        <td>
+                                            <img src="<?php echo $photo->picture_path(); ?>" class="admin-photo-thumbnail" alt="">
+                                            <div class="action_links">
+                                                <a href="delete_photo.php?id=<?php echo $photo->id; ?>" class="delete_link">Delete</a>
 
-                                                        <!-- <a href="edit_photo.php?id=<?php echo $photo->id; ?>">Edit</a> -->
-                                                        <?php
-                                                            if(!empty($_GET['user_id'])){
-                                                                echo "<a href='edit_photo.php?id={$photo->id}&role=admin'>Edit</a>";
-                                                            }else{
-                                                                echo "<a href='edit_photo.php?id={$photo->id}'>Edit</a>";
-                                                            }
-                                                        ?>
+                                                <!-- <a href="edit_photo.php?id=<?php echo $photo->id; ?>">Edit</a> -->
+                                                <?php
+                                                if(!empty($_GET['user_id'])){
+                                                    echo "<a href='edit_photo.php?id={$photo->id}&role=admin'>Edit</a>";
+                                                }else{
+                                                    echo "<a href='edit_photo.php?id={$photo->id}'>Edit</a>";
+                                                }
+                                                ?>
 
-                                                        <a href="../gallery.php?id=<?php echo $photo->id; ?>">View</a>
-                                                    </div>
-                                                    
-                                                </td>
-                                                <td><?php echo $photo->id ?></td>
-                                                <td><?php echo $photo->filename ?></td>
-                                                <td><?php echo $photo->title ?></td>
-                                                <td><?php echo $photo->size ?></td>
-                                                <td>
-                                                    <?php $comments = Comment::find_the_comments($photo->id); ?>
-                                                    <a href="comment_photo.php?id=<?php echo $photo->id; ?>"><?php echo count($comments); ?></a>
-                                                </td>
-                                            </tr>    
+                                                <a href="../gallery.php?id=<?php echo $photo->id; ?>">View</a>
+                                            </div>
+                                            
+                                        </td>
+                                        <td><?php echo $photo->id ?></td>
+                                        <td>
+                                            <?php
+                                            if($photo->view == 0){
+                                                echo 'Public';
+                                            }elseif($photo->view == 1){
+                                                echo 'Private';
+                                            }
+                                            ?>
+                                        </td>
+                                        <td><?php echo $photo->filename ?></td>
+                                        <td><?php echo $photo->title ?></td>
+                                        <td><?php echo $photo->size ?></td>
+                                        <td>
+                                            <?php $comments = Comment::find_the_comments($photo->id); ?>
+                                            <a href="comment_photo.php?id=<?php echo $photo->id; ?>"><?php echo count($comments); ?></a>
+                                        </td>
+                                    </tr>    
                                     <?php endforeach ?>                            
                                 </tbody>
                             </table>

@@ -23,6 +23,7 @@
         if(isset($_POST['update'])){
 
             if($photo){
+                $photo->view = $_POST['view'];
                 $photo->title = $_POST['title'];
                 $photo->caption = $_POST['caption'];
                 $photo->alternate_text = $_POST['alternate_text'];
@@ -61,15 +62,33 @@
 
                         <form action="" method="post">                            
                             <div class="col-md-8">
+                                <?php
+                                if($photo->view == 0){
+                                    $first = "<option value=0>Public</option>";
+                                    $second = "<option value=1>Private</option>";
+                                }else{
+                                    $first = "<option value=1>Private</option>";
+                                    $second = "<option value=0>Public</option>";
+                                }
+
+                                echo "
+                                <div class='form-group'>  
+                                    <label>View</label>
+                                    <select class='form-control' id='' name='view'>
+                                        {$first}
+                                        {$second}
+                                    </select>
+                                </div>
+                                ";
+
+                                ?>
                                 <div class="form-group">
                                     <label for="caption">Title</label>
                                     <input type="text" name="title" class="form-control" value="<?php echo $photo->title; ?>">
                                 </div>
-
                                 <div class="form-group">
                                     <a href="#" class="thumbnail"> <img src="<?php echo $photo->picture_path(); ?>" alt=""></a>
                                 </div>
-
                                 <div class="form-group">
                                     <label for="caption">Caption</label>
                                     <input type="text" name="caption" class="form-control" value="<?php echo $photo->caption; ?>">
@@ -93,20 +112,17 @@
                                     </div>
                                     <div class="inside">
                                         <div class="box-inner">
-                                            <p class="text">
-                                                <span class="glyphicon glyphicon-calendar"></span> Uploaded on: April 22, 2030 @ 5:26
-                                            </p>
                                             <p class="text ">
-                                                Photo Id: <span class="data photo_id_box">34</span>
+                                                Photo Id: <span class="data photo_id_box"><?php echo $photo->id; ?></span>
                                             </p>
                                             <p class="text">
-                                                Filename: <span class="data">image.jpg</span>
+                                                Filename: <span class="data"><?php echo $photo->filename; ?></span>
                                             </p>
                                             <p class="text">
-                                                File Type: <span class="data">JPG</span>
+                                                File Type: <span class="data"><?php echo $photo->type; ?></span>
                                             </p>
                                             <p class="text">
-                                                File Size: <span class="data">3245345</span>
+                                                File Size: <span class="data"><?php echo $photo->size; ?></span>
                                             </p>
                                         </div>
                                         <div class="info-box-footer clearfix">

@@ -7,6 +7,7 @@
 
     if(isset($_FILES['file'])){
         $photo = new Photo();
+        $photo->view = $_POST['view'];
         $photo->title = $_POST['title'];
         $photo->set_file($_FILES['file']);
         $photo->user_id = $_SESSION['user_id'];
@@ -46,7 +47,15 @@
 
                                 <form action="upload.php" method="post" enctype="multipart/form-data">
                                     <div class="form-group">
+                                        <label>Title</label>
                                         <input type="text" name="title" class="form-control">
+                                    </div>
+                                    <div class='form-group'>  
+                                        <label>View</label>
+                                        <select class='form-control' id='' name='view'>
+                                            <option value=0>Public</option>
+                                            <option value=1>Private</option>
+                                        </select>
                                     </div>
                                     <div class="form-group">
                                         <input type="file" name="file">

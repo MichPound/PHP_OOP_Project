@@ -41,7 +41,7 @@ $comments = Comment::find_the_comments($photo->id);
         <!-- Author -->
         <p class="lead">
             <!-- by <a href="#">Start Bootstrap</a> -->
-            <?php echo "by " . $user->first_name . " " . $user->last_name; ?>
+            <a href="user_public.php?user_id=<?php echo $user->id; ?>"><?php echo "by " . $user->first_name . " " . $user->last_name; ?></a>
         </p>
 
         <hr>
