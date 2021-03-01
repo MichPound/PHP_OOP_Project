@@ -1,11 +1,11 @@
 <?php
+
     if($session->is_signed_in()){
         $user = User::find_by_id($_SESSION['user_id']);
         $name = " " . $user->first_name . " " . $user->last_name;
     }else{
         $name = "Undefined";
     }
-    
 
 ?>
 
@@ -16,11 +16,10 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="../index.php">Visit Home Page</a>
+    <a class="navbar-brand" href="../index.php">Visit Gallery</a>
 </div>
 
-
-
+<?php if($session->is_signed_in()) : ?>
 <!-- Top Menu Items -->
 <ul class="nav navbar-right top-nav">
     <li class="dropdown">
@@ -36,3 +35,4 @@
         </ul>
     </li>
 </ul>
+<?php endif; ?>

@@ -13,7 +13,14 @@ $photo = Photo::find_by_id($_GET['id']);
 $user = User::find_by_id($photo->user_id);
 
 if(isset($_POST['submit'])){
-    $author = trim($_POST['author']);
+
+    if($session->is_signed_in()){
+        $user = User::find_by_id($_SESSION['user_id']);
+        $author = " " . $user->first_name . " " . $user->last_name;
+    }else{
+        $author = trim($_POST['author']);
+    }
+
     $body = trim($_POST['body']);
 
     $new_comment = Comment::create_comment($photo->id, $author, $body);
@@ -66,14 +73,20 @@ $comments = Comment::find_the_comments($photo->id);
         <div class="well">
             <h4>Leave a Comment:</h4>
             <form role="form" method="post">
+
+                <?php if(!$session->is_signed_in()) : ?>
                 <div class="form-group">
                     <label for="">Author</label>
                     <input type="text" name="author" class="form-control">
                 </div>
+                <?php endif; ?>
+
                 <div class="form-group">
                     <textarea name="body" class="form-control" rows="3"></textarea>
                 </div>
+
                 <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+
             </form>
         </div>
 
