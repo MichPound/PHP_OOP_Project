@@ -92,7 +92,33 @@ class Photo extends Db_object{
 
     }
 
+    public function delete_photo_comments(){
+        global $database;
+
+        $sql = "Delete FROM comments";
+        $sql .= " WHERE photo_id = " . $database->escape_string($this->id);
+
+        $database->query($sql);
+
+        return (mysqli_affected_rows($database->connection) >= 1) ? true : false;
+    }
+
+    public function delete_photo_likes(){
+        global $database;
+
+        $sql = "Delete FROM likes";
+        $sql .= " WHERE photo_id = " . $database->escape_string($this->id);
+
+        $database->query($sql);
+
+        return (mysqli_affected_rows($database->connection) >= 1) ? true : false;
+    }
+
     public function delete_photo(){
+
+        $this->delete_photo_comments();
+        $this->delete_photo_likes();
+
         if($this->delete()){
             $target_path = SITE_ROOT . DS . 'admin' . DS . $this->picture_path();
 
