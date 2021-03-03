@@ -19,6 +19,8 @@
 
     $count_photos = $current_user->count_users_photos();
 
+    $count_likes = $current_user->count_users_likes();
+
     $count_comments = $current_user->count_users_comments();
 
 ?>
@@ -27,14 +29,14 @@
 
     <!-- Page Heading -->
     <div class="row">
-        <div class="col-lg-6 col-md-offset-3">
+        <div class="col-lg-12">
             <h1 class="page-header">
                 My Statistics
             </h1>
             <p><?php echo $message; ?></p>
             <div class="row">
 
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="panel panel-green">
                         <div class="panel-heading">
                             <div class="row">
@@ -56,7 +58,29 @@
                         </a>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-users fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge"><?php echo $count_likes; ?></div>
+                                    <div>Likes</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="likes_user.php">
+                            <div class="panel-footer">
+                                <span class="pull-left">Total Likes on your Photos</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4">
                     <div class="panel panel-red">
                         <div class="panel-heading">
                             <div class="row">

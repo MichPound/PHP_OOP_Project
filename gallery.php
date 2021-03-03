@@ -37,39 +37,78 @@ if(isset($_POST['submit'])){
 
 $comments = Comment::find_the_comments($photo->id);
 
+if(isset($_POST['liked'])){
+
+    if(!Like::find_like($photo->id, $_SESSION['user_id'])){
+    
+        $photo->increment_likes();
+
+        $like = new Like();
+        $like->photo_id = $_POST['photo_id'];
+        $like->user_id = $_POST['user_id'];
+
+        $like->create();
+    }
+
+}
+
+if(isset($_POST['unliked'])){
+
+    if(Like::find_like($photo->id, $_SESSION['user_id'])){
+    
+        $photo->decrement_likes();
+
+        $like = Like::find_like($_POST['photo_id'], $_POST['user_id']);
+
+        $like->delete();
+    }
+
+}
+
 ?>
 
 <div class="row">
     <div class="col-lg-12">
     
-        <!-- Title -->
         <h1><?php echo $photo->title; ?></h1>
 
-        <!-- Author -->
         <p class="lead">
-            <!-- by <a href="#">Start Bootstrap</a> -->
             <a href="user_public.php?user_id=<?php echo $user->id; ?>"><?php echo "by " . $user->first_name . " " . $user->last_name; ?></a>
         </p>
 
         <hr>
 
-        <!-- Date/Time -->
-        <!-- <p><span class="glyphicon glyphicon-time"></span> Posted on August 24, 2013 at 9:00 PM</p> -->
-
-        <!-- <hr> -->
-
-        <!-- Preview Image -->
         <img class="img-responsive" src="admin/<?php echo $photo->picture_path(); ?>" alt="<?php echo $photo->alternate_text; ?>">
+
+        
+        <?php if(!Like::find_like($photo->id, $_SESSION['user_id'])) : ?>
+
+            <div class="row">
+                <p>
+                <a href="" class="like"><span class="glyphicon glyphicon-thumbs-up"></span> Like</a>
+                : <?php echo $photo->likes; ?>
+                </p>
+            </div>
+
+        <?php else : ?>
+
+            <div class="row">
+                <p>
+                <a href="" class="unlike">  <span class="glyphicon glyphicon-thumbs-down"></span> Unlike</a>
+                : <?php echo $photo->likes; ?>
+                </p>
+            </div>
+
+        <?php endif; ?>
 
         <hr>
 
-        <!-- Post Content -->
         <p class="lead"><?php echo $photo->caption; ?></p>
+
         <p><?php echo $photo->description; ?></p>
         
         <hr>
 
-        <!-- Comments Form -->
         <div class="well">
             <h4>Leave a Comment:</h4>
             <form role="form" method="post">
@@ -110,9 +149,36 @@ $comments = Comment::find_the_comments($photo->id);
 </div>
 <!-- /.row -->
 
-<!-- Blog Sidebar Widgets Column -->
-<!-- <div class="col-md-4">
-    <?php //include("includes/sidebar.php"); ?>
-</div> -->
-
 <?php include("includes/footer.php"); ?>
+
+<script>
+    // $(docmument).ready(function(){
+
+        var post_id = <?php echo $photo->id; ?>;
+        var user_id = <?php echo $_SESSION['user_id']; ?>;
+
+        $('.like').click(function(){
+            $.ajax({
+                url:"/gallery/gallery.php?id=<?php echo $photo->id; ?>",
+                type: 'post',
+                data: {
+                    'liked': 1,
+                    'photo_id': post_id,
+                    'user_id': user_id
+                }
+            });
+        });
+
+        $('.unlike').click(function(){
+            $.ajax({
+                url:"/gallery/gallery.php?id=<?php echo $photo->id; ?>",
+                type: 'post',
+                data: {
+                    'unliked': 1,
+                    'photo_id': post_id,
+                    'user_id': user_id
+                }
+            });
+        });
+    // });
+</script>

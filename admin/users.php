@@ -41,6 +41,7 @@
                                         <th>First Name</th>
                                         <th>Last Name</th>
                                         <th>Photos</th>
+                                        <th>Likes</th>
                                         <th>Comments</th>
                                     </tr>
                                 </thead>
@@ -64,6 +65,12 @@
                                                     <?php echo $user->count_users_photos() ?>
                                                     <div class="action_links">
                                                         <a href="photos_user.php?user_id=<?php echo $user->id; ?>">View</a>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <?php echo $user->count_users_likes() ?>
+                                                    <div class="action_links">
+                                                        <a href="likes_user.php?user_id=<?php echo $user->id; ?>">View</a>
                                                     </div>
                                                 </td>
                                                 <td>

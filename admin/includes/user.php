@@ -175,6 +175,19 @@ class User extends Db_object{
         return $comments;
     }
 
+    public function likes(){
+        global $database;
+        $photos = $this->photos();
+        $likes = [];
+
+        foreach ($photos as $photo) {
+            // $comments += Comment::find_by_query("SELECT * FROM comments WHERE photo_id= " . $database->escape_string($photo->id));
+            $likes = array_merge($likes, Like::find_by_query("SELECT * FROM likes WHERE photo_id= " . $database->escape_string($photo->id)));
+        }
+
+        return $likes;
+    }
+
     public function count_users_photos(){
         global $database;
 
@@ -194,6 +207,23 @@ class User extends Db_object{
 
         foreach ($photos as $photo) {
             $sql = "SELECT COUNT(*) FROM comments WHERE ";
+            $sql .= "photo_id= " . $database->escape_string($photo->id);
+            $result_set = $database->query($sql);
+            $row = mysqli_fetch_array($result_set);
+            $count += array_shift($row);
+        }
+
+        return $count;
+    }
+
+    public function count_users_likes(){
+        global $database;
+        $photos = $this->photos();
+        $sql = "";
+        $count = 0;
+
+        foreach ($photos as $photo) {
+            $sql = "SELECT COUNT(*) FROM likes WHERE ";
             $sql .= "photo_id= " . $database->escape_string($photo->id);
             $result_set = $database->query($sql);
             $row = mysqli_fetch_array($result_set);

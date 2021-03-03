@@ -92,7 +92,7 @@ if(isset($_POST['delete'])){
 
                         <?php
 
-                        if(User::find_by_id($_SESSION['user_id'])->is_admin()){
+                        if(User::find_by_id($_SESSION['user_id'])->is_admin()) :
 
                             if($user_to_update->role == "admin"){
                                 $first = "<option value='admin'>admin</option>";
@@ -102,25 +102,22 @@ if(isset($_POST['delete'])){
                                 $second = "<option value='admin'>admin</option>";
                             }
 
-                            echo "
-                            <div class='form-group'>
-                            <label for='username'>Username</label>
-                            <input type='text' name='username' class='form-control' value='{$user_to_update->username}'>
-                            </div>
-                            ";
-
-                            echo "
-                            <div class='form-group'>  
-                                <label>Role</label>
-                                <select class='form-control' id='' name='role'>
-                                    {$first}
-                                    {$second}
-                                </select>
-                            </div>
-                            ";
-                        }
-
                         ?>
+                            
+                        <div class='form-group'>
+                            <label for='username'>Username</label>
+                            <input type='text' name='username' class='form-control' value='<?php echo $user_to_update->username; ?>'>
+                        </div>
+                        
+                        <div class='form-group'>  
+                            <label>Role</label>
+                            <select class='form-control' id='' name='role'>
+                                <?php echo $first; ?>
+                                <?php echo $second; ?>
+                            </select>
+                        </div>
+                            
+                        <?php endif; ?>
 
                         <div class="form-group">
                             <label for="first name">First Name</label>
@@ -131,16 +128,12 @@ if(isset($_POST['delete'])){
                             <input type="text" name="last_name" class="form-control" value="<?php echo $user_to_update->last_name; ?>">
                         </div>
 
-                        <?php
-                        if (!User::find_by_id($_SESSION['user_id'])->is_admin()){
-                            echo "
-                            <div class='form-group'>
+                        <?php if (!User::find_by_id($_SESSION['user_id'])->is_admin()) : ?>
+                        <div class='form-group'>
                             <label for='password'>Current Password</label>
                             <input type='password' name='password' class='form-control'>
-                            </div>
-                            ";
-                        }
-                        ?>
+                        </div>
+                        <?php endif; ?>
 
                         <div class="form-group">
                             <label for="new_password">New Password</label>
@@ -165,4 +158,4 @@ if(isset($_POST['delete'])){
 </div>
 <!-- /#page-wrapper -->
 
-  <?php include("includes/footer.php"); ?>
+<?php include("includes/footer.php"); ?>

@@ -16,5 +16,6 @@ require_once("photo.php");
 require_once("comment.php");
 require_once("session.php");
 require_once("paginate.php");
+require_once("like.php");
 
 ?>

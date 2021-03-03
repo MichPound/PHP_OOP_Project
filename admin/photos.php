@@ -38,6 +38,7 @@
                                         <th>File Name</th>
                                         <th>Title</th>
                                         <th>Size</th>
+                                        <th>Likes</th>
                                         <th>Comments</th>
                                     </tr>
                                 </thead>
@@ -67,6 +68,10 @@
                                         <td><?php echo $photo->filename ?></td>
                                         <td><?php echo $photo->title ?></td>
                                         <td><?php echo $photo->size ?></td>
+                                        <td>
+                                            <?php $likes = Like::find_the_likes($photo->id); ?>
+                                            <a href="like_photo.php?id=<?php echo $photo->id; ?>"><?php echo count($likes); ?></a>
+                                        </td>
                                         <td>
                                             <?php $comments = Comment::find_the_comments($photo->id); ?>
                                             <a href="comment_photo.php?id=<?php echo $photo->id; ?>"><?php echo count($comments); ?></a>
