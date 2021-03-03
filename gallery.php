@@ -40,8 +40,6 @@ $comments = Comment::find_the_comments($photo->id);
 if(isset($_POST['liked'])){
 
     if(!Like::find_like($photo->id, $_SESSION['user_id'])){
-    
-        $photo->increment_likes();
 
         $like = new Like();
         $like->photo_id = $_POST['photo_id'];
@@ -55,8 +53,6 @@ if(isset($_POST['liked'])){
 if(isset($_POST['unliked'])){
 
     if(Like::find_like($photo->id, $_SESSION['user_id'])){
-    
-        $photo->decrement_likes();
 
         $like = Like::find_like($_POST['photo_id'], $_POST['user_id']);
 
@@ -87,7 +83,7 @@ if(isset($_POST['unliked'])){
             <div class="row">
                 <p>
                 <a href="" class="like"><span class="glyphicon glyphicon-thumbs-up"></span> Like</a>
-                : <?php echo $photo->likes; ?>
+                : <?php echo count(Like::find_the_likes($photo->id)) ?>
                 </p>
             </div>
 
@@ -96,7 +92,7 @@ if(isset($_POST['unliked'])){
             <div class="row">
                 <p>
                 <a href="" class="unlike">  <span class="glyphicon glyphicon-thumbs-down"></span> Unlike</a>
-                : <?php echo $photo->likes; ?>
+                : <?php echo count(Like::find_the_likes($photo->id)) ?>
                 </p>
             </div>
 
@@ -141,12 +137,13 @@ if(isset($_POST['unliked'])){
         <!-- Comments -->
         <?php foreach ($comments as $comment) : ?>                
         <div class="media">
-            <a class="pull-left" href="#">
+            <!-- <a class="pull-left" href="#">
                 <img class="media-object" src="http://placehold.it/64x64" alt="">
-            </a>
+            </a> -->
             <div class="media-body">
                 <h4 class="media-heading"><?php echo $comment->author; ?></h4>
                 <?php echo $comment->body; ?>
+                <hr>
             </div>
         </div>      
         <?php endforeach ?>

@@ -11,7 +11,7 @@
         if(empty($_GET['role'])){
             $direct_to = "comments_user.php";
         }else{
-            $direct_to = "users.php";
+            $direct_to = "comments.php";
         }
 
         if(empty($_GET['id'])){

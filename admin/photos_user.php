@@ -50,7 +50,7 @@
                                 </thead>
                                 <tbody>
                                     <?php foreach ($photos as $photo) : ?>
-                                    <tr>
+                                    <tr class='clickable-row' data-href="../gallery.php?id=<?php echo $photo->id; ?>">
                                         <td>
                                             <img src="<?php echo $photo->picture_path(); ?>" class="admin-photo-thumbnail" alt="">
                                             <div class="action_links">
@@ -65,7 +65,7 @@
                                                 }
                                                 ?>
 
-                                                <a href="../gallery.php?id=<?php echo $photo->id; ?>">View</a>
+                                                <!-- <a href="../gallery.php?id=<?php echo $photo->id; ?>">View</a> -->
                                             </div>
                                             
                                         </td>

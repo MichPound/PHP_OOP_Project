@@ -4,11 +4,15 @@ include("includes/header.php");
 
 if ($user = User::find_by_id($_GET['user_id'])) {
 
-    $sql = "SELECT * FROM photos WHERE user_id= ";
+    $sql = "SELECT * FROM photos ";
+    $sql .= "WHERE user_id= ";
     $sql .= $database->escape_string($_GET['user_id']);
     $sql .= " AND view=0";
     if($session->is_signed_in()){
-        $sql .= " OR view=1";
+        $sql .= " OR ";
+        $sql .= "user_id= ";
+        $sql .= $database->escape_string($_GET['user_id']);
+        $sql .= " AND view=1";
     }
 
     $photos = Photo::find_by_query($sql);

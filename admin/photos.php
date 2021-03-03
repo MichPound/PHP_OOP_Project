@@ -27,7 +27,7 @@
                         <h1 class="page-header">
                             Photos
                         </h1>
-                        <p class="bd-success"><?php echo $message ?></p>
+                        <p class="bg-success"><?php echo $message ?></p>
                         <div class="col-md-12">
                             <table class="table table-hover">
                                 <thead>                                
@@ -44,14 +44,14 @@
                                 </thead>
                                 <tbody>
                                     <?php foreach ($photos as $photo) : ?>
-                                    <tr>
+                                    <tr class='clickable-row' data-href="../gallery.php?id=<?php echo $photo->id; ?>">
                                         <td>
                                             <img src="<?php echo $photo->picture_path(); ?>" class="admin-photo-thumbnail" alt="">
 
                                             <div class="action_links">
                                                 <a href="delete_photo.php?id=<?php echo $photo->id; ?>&role=admin" class="delete_link">Delete</a>
                                                 <a href="edit_photo.php?id=<?php echo $photo->id; ?>">Edit</a>
-                                                <a href="../gallery.php?id=<?php echo $photo->id; ?>">View</a>
+                                                <!-- <a href="../gallery.php?id=<?php echo $photo->id; ?>">View</a> -->
                                             </div>
                                             
                                         </td>

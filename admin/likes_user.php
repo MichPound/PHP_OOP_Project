@@ -49,9 +49,15 @@
                                                 <td><?php echo $like->id ?></td>
                                                 <td>
                                                     <?php
-                                                    $title = Photo::find_by_id($like->photo_id)->title;
-                                                    echo $title;
+                                                    $photo = Photo::find_by_id($like->photo_id);
+
+                                                    if(empty($photo->title)){
+                                                        $title = $photo->filename;
+                                                    }else{
+                                                        $title = $photo->title;
+                                                    }
                                                     ?>
+                                                    <a href="../gallery.php?id=<?php echo $like->photo_id; ?>"><?php echo $title; ?></a>
                                                 </td> 
                                                 <td>
                                                     <?php
