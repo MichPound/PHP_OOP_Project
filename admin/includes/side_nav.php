@@ -12,6 +12,9 @@
         <li>
             <a href="comments_user.php"><i class="fa fa-fw fa-edit"></i>My Comments</a>
         </li>
+        <li>
+            <a href="likes_user.php"><i class="fa fa-fw fa-edit"></i>My Likes</a>
+        </li>
     
         <?php $user = USER::find_by_id($_SESSION['user_id']); ?>
 

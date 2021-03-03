@@ -49,7 +49,7 @@ if(isset($_POST['register'])){
             <input type="password" class="form-control" name="password" value="<?php echo htmlentities($password); ?>">
         </div>
         <div class="form-group">
-            <input type="submit" name="submit" value="Submit" class="btn btn-primary">
+            <input type="submit" name="submit" value="Login" class="btn btn-primary">
             <input type="submit" name="register" value="Register" class="btn">
         </div>
     </form>

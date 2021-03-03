@@ -57,11 +57,8 @@
                                                     <?php
                                                     $user = User::find_by_id($like->user_id);
                                                     $name = $user->first_name . ' ' . $user->last_name;
-                                                    echo $name;
                                                     ?>
-                                                    <!-- <div class="action_links"> -->
-                                                        <!-- <a href="delete_comment_photo.php?id=<?php echo $comment->id; ?>" class="delete_link">Delete</a> -->
-                                                    <!-- </div> -->
+                                                    <a href="../user_public.php?user_id=<?php echo $user->id; ?>"><?php echo $name; ?></a>
                                                 </td>                             
                                             </tr>    
                                     <?php endforeach ?>                            

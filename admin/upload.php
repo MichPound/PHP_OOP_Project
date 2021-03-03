@@ -51,7 +51,7 @@
                                         <input type="text" name="title" class="form-control">
                                     </div>
                                     <div class='form-group'>  
-                                        <label>View</label>
+                                        <label>View (Anyone can see public but only other registered users can see private)</label>
                                         <select class='form-control' id='' name='view'>
                                             <option value=0>Public</option>
                                             <option value=1>Private</option>

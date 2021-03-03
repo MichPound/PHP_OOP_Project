@@ -47,39 +47,39 @@
                                 </thead>
                                 <tbody>
                                     <?php foreach ($users as $user) : ?>
-                                            <tr>
-                                                <td><?php echo $user->id ?></td>
-                                                <td><img src="<?php echo $user->image_path_and_placeholder(); ?>" class="admin-user-thumbnail user_image" alt=""></td>
-                                                
-                                                <td>
-                                                    <?php echo $user->username ?>
-                                                    <div class="action_links">
-                                                        <a href="delete_user.php?role=admin&id=<?php echo $user->id; ?>" class="delete_link">Delete</a>
-                                                        <a href="edit_user.php?id=<?php echo $user->id; ?>">Edit</a>
-                                                    </div>
-                                                </td>
-                                                <td><?php echo $user->role ?></td>
-                                                <td><?php echo $user->first_name ?></td>
-                                                <td><?php echo $user->last_name ?></td>
-                                                <td>
-                                                    <?php echo $user->count_users_photos() ?>
-                                                    <div class="action_links">
-                                                        <a href="photos_user.php?user_id=<?php echo $user->id; ?>">View</a>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <?php echo $user->count_users_likes() ?>
-                                                    <div class="action_links">
-                                                        <a href="likes_user.php?user_id=<?php echo $user->id; ?>">View</a>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <?php echo $user->count_users_comments() ?>
-                                                    <div class="action_links">
-                                                        <a href="comments_user.php?user_id=<?php echo $user->id; ?>">View</a>
-                                                    </div>
-                                                </td>
-                                            </tr>    
+                                    <tr class='clickable-row' data-href='../user_public.php?user_id=<?php echo $user->id; ?>' >
+                                        <td><?php echo $user->id ?></td>
+                                        <td><img src="<?php echo $user->image_path_and_placeholder(); ?>" class="admin-user-thumbnail user_image" alt=""></td>
+                                        
+                                        <td>
+                                            <?php echo $user->username ?>
+                                            <div class="action_links">
+                                                <a href="delete_user.php?role=admin&id=<?php echo $user->id; ?>" class="delete_link">Delete</a>
+                                                <a href="edit_user.php?id=<?php echo $user->id; ?>">Edit</a>
+                                            </div>
+                                        </td>
+                                        <td><?php echo $user->role ?></td>
+                                        <td><?php echo $user->first_name ?></td>
+                                        <td><?php echo $user->last_name ?></td>
+                                        <td>
+                                            <?php echo $user->count_users_photos() ?>
+                                            <div class="action_links">
+                                                <a href="photos_user.php?user_id=<?php echo $user->id; ?>">View</a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <?php echo $user->count_users_likes() ?>
+                                            <div class="action_links">
+                                                <a href="likes_user.php?user_id=<?php echo $user->id; ?>">View</a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <?php echo $user->count_users_comments() ?>
+                                            <div class="action_links">
+                                                <a href="comments_user.php?user_id=<?php echo $user->id; ?>">View</a>
+                                            </div>
+                                        </td>
+                                    </tr>    
                                     <?php endforeach ?>                            
                                 </tbody>
                             </table>

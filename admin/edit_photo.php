@@ -73,7 +73,7 @@
 
                                 echo "
                                 <div class='form-group'>  
-                                    <label>View</label>
+                                    <label>View (Anyone can see public but only other registered users can see private)</label>
                                     <select class='form-control' id='' name='view'>
                                         {$first}
                                         {$second}

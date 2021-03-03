@@ -7,6 +7,9 @@ if ($user = User::find_by_id($_GET['user_id'])) {
     $sql = "SELECT * FROM photos WHERE user_id= ";
     $sql .= $database->escape_string($_GET['user_id']);
     $sql .= " AND view=0";
+    if($session->is_signed_in()){
+        $sql .= " OR view=1";
+    }
 
     $photos = Photo::find_by_query($sql);
 }
