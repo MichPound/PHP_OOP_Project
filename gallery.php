@@ -80,8 +80,9 @@ if(isset($_POST['unliked'])){
 
         <img class="img-responsive" src="admin/<?php echo $photo->picture_path(); ?>" alt="<?php echo $photo->alternate_text; ?>">
 
+        <hr>
         
-        <?php if(!Like::find_like($photo->id, $_SESSION['user_id'])) : ?>
+        <?php if($session->is_signed_in() && !Like::find_like($photo->id, $_SESSION['user_id'])) : ?>
 
             <div class="row">
                 <p>
@@ -90,13 +91,19 @@ if(isset($_POST['unliked'])){
                 </p>
             </div>
 
-        <?php else : ?>
+        <?php elseif($session->is_signed_in() && Like::find_like($photo->id, $_SESSION['user_id'])) : ?>
 
             <div class="row">
                 <p>
                 <a href="" class="unlike">  <span class="glyphicon glyphicon-thumbs-down"></span> Unlike</a>
                 : <?php echo $photo->likes; ?>
                 </p>
+            </div>
+
+        <?php else : ?>
+
+            <div class="row">
+                <h4>Please login/register to like photos</h4>
             </div>
 
         <?php endif; ?>
