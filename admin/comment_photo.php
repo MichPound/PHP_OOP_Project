@@ -37,6 +37,7 @@
                                 <thead>                                
                                     <tr>
                                         <th>Id</th>
+                                        <th>Photo</th>
                                         <th>Author</th>
                                         <th>Body</th>
                                     </tr>
@@ -45,6 +46,17 @@
                                     <?php foreach ($comments as $comment) : ?>
                                             <tr>
                                                 <td><?php echo $comment->id ?></td>
+                                                <td>
+                                                    <?php
+                                                    $photo = Photo::find_by_id($comment->photo_id);
+                                                    if(empty($photo->title)){
+                                                        $title = $photo->filename;
+                                                    }else{
+                                                        $title = $photo->title;
+                                                    }
+                                                    ?>
+                                                    <a href="../gallery.php?id=<?php echo $photo->id; ?>"><?php echo $title; ?></a>
+                                                </td>
                                                 <td>
                                                     <?php echo $comment->author ?>
                                                     <div class="action_links">

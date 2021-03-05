@@ -6,18 +6,26 @@ if ($user = User::find_by_id($_GET['user_id'])) {
 
     $sql = "SELECT * FROM photos ";
     $sql .= "WHERE user_id= ";
-    $sql .= $database->escape_string($_GET['user_id']);
-    $sql .= " AND view=0";
-    if($session->is_signed_in()){
-        $sql .= " OR ";
-        $sql .= "user_id= ";
+
+    if(empty($_GET['view'])){
+        $sql .= $database->escape_string($_GET['user_id']);
+        $sql .= " AND view=0";
+        if($session->is_signed_in()){
+            $sql .= " OR ";
+            $sql .= "user_id= ";
+            $sql .= $database->escape_string($_GET['user_id']);
+            $sql .= " AND view=1";
+        }
+    }elseif($_GET['view'] == 'public'){
+        $sql .= $database->escape_string($_GET['user_id']);
+        $sql .= " AND view=0";
+    }elseif($_GET['view'] == 'private'){
         $sql .= $database->escape_string($_GET['user_id']);
         $sql .= " AND view=1";
     }
 
     $photos = Photo::find_by_query($sql);
 }
-
 ?>
 
 <p class="lead">

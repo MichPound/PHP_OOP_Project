@@ -12,7 +12,7 @@ if($session->is_signed_in()){
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     
         <div class="navbar-header">
-            <a class="navbar-brand" href="index.php">Gallery</a>
+            <a class="navbar-brand" href="index.php?page=1">Gallery</a>
             <a class="navbar-brand" href="admin/user_stats.php">Home</a>
         </div>
     

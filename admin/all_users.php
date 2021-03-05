@@ -38,7 +38,13 @@
                                             <tr class='clickable-row' data-href='../user_public.php?user_id=<?php echo $user->id; ?>' >
                                                 <td><img src="<?php echo $user->image_path_and_placeholder(); ?>" class="admin-user-thumbnail user_image" alt=""></td>
                                                 
-                                                <td> <?php echo $user->username ?> </td>
+                                                <td>
+                                                    <?php echo $user->username ?>
+                                                    <div class="action_links">
+                                                        <a href="../user_public.php?user_id=<?php echo $user->id;?>&view=public">Public</a>
+                                                        <a href="../user_public.php?user_id=<?php echo $user->id;?>&view=private">Private</a>
+                                                    </div>
+                                                </td>
 
                                                 <td> <?php echo $user->first_name . ' ' . $user->last_name; ?> </td>
 
